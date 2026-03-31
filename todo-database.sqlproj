@@ -9,6 +9,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <SqlTargetPlatform>AzureSqlDatabase</SqlTargetPlatform>
     <SuppressWarnings>71501</SuppressWarnings>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Tables" />
