@@ -15,7 +15,6 @@
     <Folder Include="Views" />
     <Folder Include="StoredProcedures" />
     <Build Include="Tables\TodoItem.sql" />
-    <Build Include="Tables\managed_identity.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')" />
 </Project>
