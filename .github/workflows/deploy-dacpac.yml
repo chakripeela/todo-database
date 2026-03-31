@@ -1,11 +1,6 @@
 name: Build and Deploy DACPAC
 
 on:
-  push:
-    paths:
-      - "**/*.sql"
-      - "**/*.sqlproj"
-      - ".github/workflows/deploy-dacpac.yml"
   workflow_dispatch:
 
 jobs:
