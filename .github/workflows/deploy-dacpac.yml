@@ -18,13 +18,24 @@ jobs:
 
       - name: Build DACPAC
         run: |
-          msbuild $DACPAC_PROJECT /p:Configuration=Release /p:OutputPath=$BUILD_OUTPUT
+          msbuild $DACPAC_PROJECT /p:Configuration=Release
 
-      - name: Deploy DACPAC to SQL Server (AAD Service Principal)
-        env:
-          SQL_SERVER: ${{ secrets.SQL_SERVER }}
-          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-        run: |
-          sqlpackage /Action:Publish /SourceFile:$BUILD_OUTPUT/todo-database.dacpac /TargetServerName:$SQL_SERVER /TargetDatabaseName:$SQL_DATABASE /TargetUser:$AZURE_CLIENT_ID /TargetPassword:$AZURE_CLIENT_SECRET /Authentication:ActiveDirectoryPassword /p:BlockOnPossibleDataLoss=false
+      - name: Upload DACPAC Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dacpac-artifact
+          path: bin/Release/todo-database.dacpac
+
+      - name: Download DACPAC Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dacpac-artifact
+          path: ./dacpac-temp
+
+      - name: Deploy DACPAC using azure/sql-action
+        uses: Azure/sql-action@v2.2
+        with:
+          server-name: ${{ secrets.SQL_SERVER }}
+          connection-string: "Server=${{ secrets.SQL_SERVER }};Database=${{ secrets.SQL_DATABASE }};Authentication=Active Directory Service Principal;User Id=${{ secrets.AZURE_CLIENT_ID }};Password=${{ secrets.AZURE_CLIENT_SECRET }};"
+          dacpac-package: ./dacpac-temp/todo-database.dacpac
+          action: Publish
