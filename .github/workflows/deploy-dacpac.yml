@@ -1,0 +1,35 @@
+name: Build and Deploy DACPAC
+
+on:
+  push:
+    paths:
+      - "**/*.sql"
+      - "**/*.sqlproj"
+      - ".github/workflows/deploy-dacpac.yml"
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: windows-latest
+    env:
+      DACPAC_PROJECT: todo-database.sqlproj
+      BUILD_OUTPUT: build_output
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build DACPAC
+        run: |
+          msbuild %DACPAC_PROJECT% /p:Configuration=Release /p:OutputPath=%BUILD_OUTPUT%
+
+      - name: Deploy DACPAC to SQL Server (AAD Service Principal)
+        env:
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        run: |
+          sqlpackage /Action:Publish /SourceFile:%BUILD_OUTPUT%\todo-database.dacpac /TargetServerName:%SQL_SERVER% /TargetDatabaseName:%SQL_DATABASE% /TargetUser:%AZURE_CLIENT_ID% /TargetPassword:%AZURE_CLIENT_SECRET% /Authentication:ActiveDirectoryPassword /p:BlockOnPossibleDataLoss=false
