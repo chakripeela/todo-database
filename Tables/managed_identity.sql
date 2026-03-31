@@ -1,6 +1,6 @@
-CREATE USER [aks-todoapp-agentpool] FROM EXTERNAL PROVIDER;
-GO
-ALTER ROLE db_datareader ADD MEMBER [aks-todoapp-agentpool];
-GO
-ALTER ROLE db_datawriter ADD MEMBER [aks-todoapp-agentpool];
-GO
+-- CREATE USER [aks-todoapp-agentpool] FROM EXTERNAL PROVIDER;
+-- GO
+-- ALTER ROLE db_datareader ADD MEMBER [aks-todoapp-agentpool];
+-- GO
+-- ALTER ROLE db_datawriter ADD MEMBER [aks-todoapp-agentpool];
+-- GO
