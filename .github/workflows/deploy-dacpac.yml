@@ -37,5 +37,5 @@ jobs:
         with:
           server-name: ${{ secrets.SQL_SERVER }}
           connection-string: "Server=${{ secrets.SQL_SERVER }};Database=${{ secrets.SQL_DATABASE }};Authentication=Active Directory Service Principal;User Id=${{ secrets.AZURE_CLIENT_ID }};Password=${{ secrets.AZURE_CLIENT_SECRET }};"
-          dacpac-package: ./dacpac-temp/todo-database.dacpac
+          path: ./dacpac-temp/todo-database.dacpac
           action: Publish
