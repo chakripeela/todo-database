@@ -7,7 +7,8 @@
     <RootNamespace>todo_database</RootNamespace>
     <ModelCollation>1033, CI</ModelCollation>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <SqlTargetPlatform>SqlServer2012</SqlTargetPlatform>
+    <SqlTargetPlatform>AzureSqlDatabase</SqlTargetPlatform>
+    <SuppressWarnings>71501</SuppressWarnings>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Tables" />
