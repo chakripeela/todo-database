@@ -18,7 +18,7 @@ jobs:
 
       - name: Build DACPAC
         run: |
-          msbuild %DACPAC_PROJECT% /p:Configuration=Release /p:OutputPath=%BUILD_OUTPUT%
+          msbuild $DACPAC_PROJECT /p:Configuration=Release /p:OutputPath=$BUILD_OUTPUT
 
       - name: Deploy DACPAC to SQL Server (AAD Service Principal)
         env:
@@ -27,4 +27,4 @@ jobs:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         run: |
-          sqlpackage /Action:Publish /SourceFile:%BUILD_OUTPUT%\todo-database.dacpac /TargetServerName:%SQL_SERVER% /TargetDatabaseName:%SQL_DATABASE% /TargetUser:%AZURE_CLIENT_ID% /TargetPassword:%AZURE_CLIENT_SECRET% /Authentication:ActiveDirectoryPassword /p:BlockOnPossibleDataLoss=false
+          sqlpackage /Action:Publish /SourceFile:$BUILD_OUTPUT/todo-database.dacpac /TargetServerName:$SQL_SERVER /TargetDatabaseName:$SQL_DATABASE /TargetUser:$AZURE_CLIENT_ID /TargetPassword:$AZURE_CLIENT_SECRET /Authentication:ActiveDirectoryPassword /p:BlockOnPossibleDataLoss=false
